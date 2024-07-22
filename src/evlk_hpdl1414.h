@@ -33,6 +33,7 @@ namespace _EVLK_HPDL1414_
                  nopin_size_t A0,
                  nopin_size_t A1,
                  nopin_size_t WR);
+        void Begin();      // init driver pins
         void pos(int num); // 0~3
         void send(char c);
         void latch();
