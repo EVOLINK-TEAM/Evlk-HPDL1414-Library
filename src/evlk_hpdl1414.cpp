@@ -17,8 +17,24 @@ namespace _EVLK_HPDL1414_
                        nopin_size_t WR)
         : D0(D0), D1(D1), D2(D2), D3(D3), D4(D4), D5(D5), D6(D6),
           A0(A0), A1(A1), WR(WR)
-    { memset(Buffer, 0, 4 * sizeof(char)); };
-    void hpdl1414::Begin(){
+    {
+        memset(Buffer, 0, 4 * sizeof(char));
+    };
+    hpdl1414::~hpdl1414()
+    {
+        pMode(D0, INPUT);
+        pMode(D1, INPUT);
+        pMode(D2, INPUT);
+        pMode(D3, INPUT);
+        pMode(D4, INPUT);
+        pMode(D5, INPUT);
+        pMode(D6, INPUT);
+        pMode(A0, INPUT);
+        pMode(A1, INPUT);
+        pMode(WR, INPUT);
+    }
+    void hpdl1414::Begin()
+    {
         pMode(D0, OUTPUT);
         pMode(D1, OUTPUT);
         pMode(D2, OUTPUT);
