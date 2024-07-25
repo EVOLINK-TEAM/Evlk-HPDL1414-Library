@@ -33,9 +33,12 @@ namespace _EVLK_HPDL1414_
                  nopin_size_t A0,
                  nopin_size_t A1,
                  nopin_size_t WR);
+        ~hpdl1414();
+        void Begin();      // init driver pins
         void pos(int num); // 0~3
         void send(char c);
         void latch();
+        using Print::write;
         size_t write(uint8_t) override;
         size_t write(const uint8_t *buffer, size_t size) override;
         void flush() override;

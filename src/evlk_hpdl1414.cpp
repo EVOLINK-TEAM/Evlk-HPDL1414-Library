@@ -1,5 +1,8 @@
 #include "evlk_hpdl1414.h"
 
+#define pMode(pin, val) (pin).mode((PinMode)(val))
+#define dWrite(pin, val) (pin).dwrite((PinStatus)(val))
+
 namespace _EVLK_HPDL1414_
 {
     hpdl1414::hpdl1414(nopin_size_t D0,
@@ -16,32 +19,48 @@ namespace _EVLK_HPDL1414_
           A0(A0), A1(A1), WR(WR)
     {
         memset(Buffer, 0, 4 * sizeof(char));
-        pinMode(D0, OUTPUT);
-        pinMode(D1, OUTPUT);
-        pinMode(D2, OUTPUT);
-        pinMode(D3, OUTPUT);
-        pinMode(D4, OUTPUT);
-        pinMode(D5, OUTPUT);
-        pinMode(D6, OUTPUT);
-        pinMode(A0, OUTPUT);
-        pinMode(A1, OUTPUT);
-        pinMode(WR, OUTPUT);
+    };
+    hpdl1414::~hpdl1414()
+    {
+        pMode(D0, INPUT);
+        pMode(D1, INPUT);
+        pMode(D2, INPUT);
+        pMode(D3, INPUT);
+        pMode(D4, INPUT);
+        pMode(D5, INPUT);
+        pMode(D6, INPUT);
+        pMode(A0, INPUT);
+        pMode(A1, INPUT);
+        pMode(WR, INPUT);
+    }
+    void hpdl1414::Begin()
+    {
+        pMode(D0, OUTPUT);
+        pMode(D1, OUTPUT);
+        pMode(D2, OUTPUT);
+        pMode(D3, OUTPUT);
+        pMode(D4, OUTPUT);
+        pMode(D5, OUTPUT);
+        pMode(D6, OUTPUT);
+        pMode(A0, OUTPUT);
+        pMode(A1, OUTPUT);
+        pMode(WR, OUTPUT);
     };
     void hpdl1414::pos(int num)
     {
-        digitalWrite(A0, LOW);
-        digitalWrite(A1, LOW);
+        dWrite(A0, LOW);
+        dWrite(A1, LOW);
         switch (num)
         {
         case 0:
-            digitalWrite(A0, HIGH);
-            digitalWrite(A1, HIGH);
+            dWrite(A0, HIGH);
+            dWrite(A1, HIGH);
             break;
         case 1:
-            digitalWrite(A1, HIGH);
+            dWrite(A1, HIGH);
             break;
         case 2:
-            digitalWrite(A0, HIGH);
+            dWrite(A0, HIGH);
             break;
         case 4:
             break;
@@ -51,19 +70,19 @@ namespace _EVLK_HPDL1414_
     };
     void hpdl1414::send(char data)
     {
-        digitalWrite(D0, (data >> 0) & 0x1);
-        digitalWrite(D1, (data >> 1) & 0x1);
-        digitalWrite(D2, (data >> 2) & 0x1);
-        digitalWrite(D3, (data >> 3) & 0x1);
-        digitalWrite(D4, (data >> 4) & 0x1);
-        digitalWrite(D5, (data >> 5) & 0x1);
-        digitalWrite(D6, (data >> 6) & 0x1);
+        dWrite(D0, (data >> 0) & 0x1);
+        dWrite(D1, (data >> 1) & 0x1);
+        dWrite(D2, (data >> 2) & 0x1);
+        dWrite(D3, (data >> 3) & 0x1);
+        dWrite(D4, (data >> 4) & 0x1);
+        dWrite(D5, (data >> 5) & 0x1);
+        dWrite(D6, (data >> 6) & 0x1);
     };
     void hpdl1414::latch()
     {
-        digitalWrite(WR, LOW);
+        dWrite(WR, LOW);
         delay(1);
-        digitalWrite(WR, HIGH);
+        dWrite(WR, HIGH);
     };
     size_t hpdl1414::write(uint8_t c)
     {
@@ -76,12 +95,9 @@ namespace _EVLK_HPDL1414_
     {
         size_t n = 0;
         size = size > 4 ? 4 : size;
-        buffer += size - 1;
-        while (size--)
-            if (write(*buffer--))
-                n++;
-            else
-                break;
+        memmove(Buffer + size, Buffer, 4 - size);
+        memcpy(Buffer, buffer, size);
+        flush();
         return n;
     };
     void hpdl1414::flush()
