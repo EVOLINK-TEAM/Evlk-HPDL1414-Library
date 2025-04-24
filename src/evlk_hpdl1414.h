@@ -4,44 +4,34 @@
 #include "Arduino.h"
 #include "evlk_nopins.h"
 
-namespace _EVLK_HPDL1414_
-{
-    class hpdl1414 : public Print
-    {
-    private:
-        using nopin_size_t = _EVLK_NOPINS_::nopin_size_t;
-        nopin_size_t D0;
-        nopin_size_t D1;
-        nopin_size_t D2;
-        nopin_size_t D3;
-        nopin_size_t D4;
-        nopin_size_t D5;
-        nopin_size_t D6;
-        nopin_size_t A0;
-        nopin_size_t A1;
-        nopin_size_t WR;
-        char Buffer[4];
+namespace _EVLK_HPDL1414_ {
+class hpdl1414 : public Print {
+  private:
+    using nopin_size_t = _EVLK_NOPINS_::nopin_size_t;
+    nopin_size_t D0;
+    nopin_size_t D1;
+    nopin_size_t D2;
+    nopin_size_t D3;
+    nopin_size_t D4;
+    nopin_size_t D5;
+    nopin_size_t D6;
+    nopin_size_t A0;
+    nopin_size_t A1;
+    nopin_size_t WR;
+    char Buffer[4];
 
-    public:
-        hpdl1414(nopin_size_t D0,
-                 nopin_size_t D1,
-                 nopin_size_t D2,
-                 nopin_size_t D3,
-                 nopin_size_t D4,
-                 nopin_size_t D5,
-                 nopin_size_t D6,
-                 nopin_size_t A0,
-                 nopin_size_t A1,
-                 nopin_size_t WR);
-        ~hpdl1414();
-        void Begin();      // init driver pins
-        void pos(int num); // 0~3
-        void send(char c);
-        void latch();
-        using Print::write;
-        size_t write(uint8_t) override;
-        size_t write(const uint8_t *buffer, size_t size) override;
-        void flush() override;
-    };
-}
+  public:
+    hpdl1414(nopin_size_t D0, nopin_size_t D1, nopin_size_t D2, nopin_size_t D3, nopin_size_t D4,
+             nopin_size_t D5, nopin_size_t D6, nopin_size_t A0, nopin_size_t A1, nopin_size_t WR);
+    ~hpdl1414();
+    void Begin();      // init driver pins
+    void pos(int num); // 0~3
+    void send(char c);
+    void latch();
+    using Print::write;
+    size_t write(uint8_t) override;
+    size_t write(const uint8_t *buffer, size_t size) override;
+    void flush() override;
+};
+} // namespace _EVLK_HPDL1414_
 #endif
